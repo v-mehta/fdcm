@@ -20,7 +20,7 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
 AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING 
 OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
 */
-#include "DistanceTransform.h"
+#include "../../include/Image/DistanceTransform.h"
 
 // dt of binary image using squared distance
 void DistanceTransform::CompDT(const Image<uchar> *input,Image<float> *output,bool onEqualOne,Image<int> *nn)
