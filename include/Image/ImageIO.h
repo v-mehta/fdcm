@@ -27,6 +27,7 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <climits>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include "Image.h"
 
 
@@ -155,7 +156,11 @@ Image<uchar> *ImageIO::LoadPGM(const char *name)
 	std::ifstream file(name, std::ios::in | std::ios::binary);
 	pnm_read(file, buf);
 	if (strncmp(buf, "P5", 2))
+	{
+        std::cout << "Magic Number missing" << std::endl;
 		return NULL;
+	}
+
 
 	pnm_read(file, buf);
 	int width = atoi(buf);
@@ -164,7 +169,10 @@ Image<uchar> *ImageIO::LoadPGM(const char *name)
 
 	pnm_read(file, buf);
 	if (atoi(buf) > UCHAR_MAX)
+	{
+        std::cout << "Buffer size greater than max" << std::endl;
 		return NULL;
+	}
 
 	/* read data */
 	Image<uchar> *im = new Image<uchar>(width, height);

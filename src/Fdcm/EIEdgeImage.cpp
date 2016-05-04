@@ -1,8 +1,4 @@
 /*
-Copyright 2011, Ming-Yu Liu
-
-All Rights Reserved 
-
 Permission to use, copy, modify, and distribute this software and 
 its documentation for any non-commercial purpose is hereby granted 
 without fee, provided that the above copyright notice appear in 

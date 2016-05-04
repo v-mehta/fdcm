@@ -1,27 +1,3 @@
-/*
-Copyright 2011, Ming-Yu Liu
-
-All Rights Reserved 
-
-Permission to use, copy, modify, and distribute this software and 
-its documentation for any non-commercial purpose is hereby granted 
-without fee, provided that the above copyright notice appear in 
-all copies and that both that copyright notice and this permission 
-notice appear in supporting documentation, and that the name of 
-the author not be used in advertising or publicity pertaining to 
-distribution of the software without specific, written prior 
-permission. 
-
-THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, 
-INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
-ANY PARTICULAR PURPOSE. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR 
-ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES 
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN 
-AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING 
-OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
-*/
-
-
 //#include <cxcore.h>
 #include "Image/Image.h"
 #include "Image/ImageIO.h"
@@ -32,11 +8,38 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <string>
 
 #include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+
+#include "edge_map.cpp"
+
+void generate_edge_map(string file)
+{
+    cv::Mat image = cv::imread(file);
+    cv::Mat detected_edges;
+    cv::blur( image, detected_edges, cv::Size(3,3) );
+
+    int lowThreshold = 50, highThreshold = 80;
+    int kernel_size = 3;
+
+    /// Canny detector
+    Canny( detected_edges, detected_edges, lowThreshold, highThreshold, kernel_size );
+
+    cv::imshow("Edge map", detected_edges);
+    cv::waitKey();
+
+    vector<int> params;
+    params.push_back(cv::IMWRITE_PXM_BINARY);
+    params.push_back(1);
+    cv::imwrite(file.substr(0, file.length()-4) + "_edges.pgm", detected_edges, params);
+
+}
 
 int main(int argc, char *argv[])
 {
-	
+    //generate_edge_map(argv[1]);
+    //return 0;
+
 	if(argc < 7)
 	{
 		std::cerr << "[Syntax] fdcm template_edgeMap.pgm input_edgeMap.pgm input_realImage.jpg para_line_fitter.txt template_line_fitter.txt para_line_matcher.txt" << std::endl;
@@ -58,6 +61,14 @@ int main(int argc, char *argv[])
 	//string templateFileName("data/template_applelogo.txt");
 	//string edgeMapName("data/hat_edges.pgm");
 	//string displayImageName("data/hat.jpg");
+
+    //cv::Mat img = cv::imread(edgeMapName);
+    //cv::resize(img, img, cv::Size(640, 480));
+    //edgeMapName = "../Query/tmp.pgm";
+    //vector<int> params;
+    //params.push_back(cv::IMWRITE_PXM_BINARY);
+    //params.push_back(1);
+    //cv::imwrite(edgeMapName, img, params);
 
     //Image *inputImage=NULL;
     Image<uchar> *inputImage=NULL;
@@ -107,7 +118,6 @@ int main(int argc, char *argv[])
 	//lm.Match(lf,detWind);
 	//lm.MatchCostMap(lf,outputCostMapName.c_str());
 
-
     vector< vector<LMDetWind> > detWindArrays;
     detWindArrays.clear();
     double maxThreshold = 0.12;
@@ -137,28 +147,26 @@ int main(int argc, char *argv[])
 
         detWind.push_back(wind);
     }
-    
+
     cout << "Number of detection windows " << detWind.size() << endl;
     // Display best matcher in edge map
-	if(displayImageName.c_str())
+	if(displayImageName.c_str() && detWind.size() > 0)
 	{
         cout << "Loading color original image" << endl;
 		//Image<RGBMap> *debugImage = ImageIO::LoadPPM(displayImageName.c_str());
         cv::Mat image = cv::imread(displayImageName);
 
         cout << "Drawing detection window" << endl;
-        cv::Point x = cv::Point(detWind[0].x_, detWind[0].y_);
-        cv::Point y = cv::Point(detWind[0].x_ + detWind[0].width_, detWind[0].y_ + detWind[0].height_);
-        cv::rectangle(image, y, x, cv::Scalar(0, 255, 0));
+        for(int idx=0; idx<detWind.size(); idx++)
+        {
+            cv::Point x = cv::Point(detWind[idx].x_, detWind[idx].y_);
+            cv::Point y = cv::Point(detWind[idx].x_ + detWind[idx].width_, detWind[idx].y_ + detWind[idx].height_);
+            cv::rectangle(image, y, x, cv::Scalar(0, 255, 0));
+        }
+
         cv::imshow("Matched!", image);
         cv::waitKey();
-		//LMDisplay::DrawDetWind(debugImage,detWind[0].x_,detWind[0].y_,detWind[0].width_,detWind[0].height_,RGBMap(0,255,0),4);
-		//char outputname[256];
-		//sprintf(outputname,"%s.output.ppm",displayImageName.c_str());
 
-        //cout << "Saving image" << endl;
-		//ImageIO::SavePPM(debugImage,outputname);
-		//delete debugImage;
 	}
 
 	//cvReleaseImage(&inputImage);

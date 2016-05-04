@@ -1,6 +1,4 @@
 /*
-Copyright 2011, Ming-Yu Liu
-
 All Rights Reserved 
 
 Permission to use, copy, modify, and distribute this software and 
