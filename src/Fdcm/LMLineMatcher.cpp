@@ -20,7 +20,7 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
 AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING 
 OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
 */
-#include "LMLineMatcher.h"
+#include "../../include/Fdcm/LMLineMatcher.h"
 
 
 LMLineMatcher::LMLineMatcher()
@@ -81,6 +81,7 @@ void LMLineMatcher::Match(LFLineFitter &lf,vector<LMDetWind> &detWind)
 	////QueryPerformanceCounter(&t1);
 
 	// structure computation
+    cout << "Structure computation" << endl;
 	queryImage_.SetNumDirections(nDirections_);
 	queryImage_.Read(lf);
 	queryImage_.Scale(scale_);
@@ -96,7 +97,8 @@ void LMLineMatcher::Match(LFLineFitter &lf,vector<LMDetWind> &detWind)
 
 	double minCost = 1e+10;
 	
-	// mathcing
+	// matching
+    cout << "matching" << endl;
 	int counter = 0;
 	for (int i=0 ; i<ndbImages_ ; i++)
 	{		
@@ -499,17 +501,38 @@ void LMLineMatcher::Init(const char* fileName)
 	dbImages_ = new EIEdgeImage [ndbImages_];
 
 	// read the templates
-	cout<<"Number of templates = "<<ndbImages_<<endl;
 	for (int i=0;i<ndbImages_ ;i++)
 	{
 		getline(file,line);
 		dbImages_[i].SetNumDirections(nDirections_);
-		dbImages_[i].Read(line.c_str());		
+		dbImages_[i].Read(line.c_str());
 		dbImages_[i].Scale(scale_*db_scale_);
 	}
 	file.close();
 }
 
+void LMLineMatcher::Init(LFLineFitter &lf)
+{
+    // We are only considering a single edge template at a time
+	ndbImages_ = 1;
+	dbImages_ = new EIEdgeImage [ndbImages_];
+
+    double *tmplte = new double[lf.rNLineSegments() * 4];
+    for(int i=0;i<lf.rNLineSegments();i++)
+    {
+        tmplte[i+0*lf.rNLineSegments()] = lf.outEdgeMap_[i].sx_;
+        tmplte[i+1*lf.rNLineSegments()] = lf.outEdgeMap_[i].sy_;
+        tmplte[i+2*lf.rNLineSegments()] = lf.outEdgeMap_[i].ex_;
+        tmplte[i+3*lf.rNLineSegments()] = lf.outEdgeMap_[i].ey_;
+    }
+
+	for(int i=0;i<ndbImages_;i++)
+	{
+		dbImages_[i].SetNumDirections(nDirections_);
+		dbImages_[i].Read( tmplte, lf.rNLineSegments() );
+		dbImages_[i].Scale(scale_*db_scale_);
+	}
+}
 
 void LMLineMatcher::SingleShapeDetectionWithVaryingTemplateSizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<LMDetWind> > &detWindArrays)
 {

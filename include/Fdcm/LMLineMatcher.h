@@ -58,6 +58,7 @@ public:
 	void PrintParameter();
 
 	void Init(const char* fileName);
+	void Init(LFLineFitter &lf);
 
 	// find the best matcher
 	void Match(LFLineFitter &lf,vector<LMDetWind> &detWind);

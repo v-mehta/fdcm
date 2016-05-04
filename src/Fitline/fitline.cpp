@@ -25,25 +25,28 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <string>
 #include "Image/Image.h"
 #include "Image/ImageIO.h"
-#include "LFLineFitter.h"
+#include "../../include/Fitline/LFLineFitter.h"
 
 using namespace std;
 
-void main(int argc, char *argv[])
+//int run_fitline(int argc, char *argv[])
+int fitline(string image_name, string out_file, string output_image)
 {
 	//IplImage *inputImage=NULL;
 	Image<uchar> *inputImage=NULL;
 	LFLineFitter lf;
 
+    /*
 	if(argc != 4)
 	{
 		std::cerr<<"[Syntax] fitline   input_edgeMap.pgm   output_line.txt   output_edgeMap.pgm"<<std::endl;
 		exit(0);
 	}
+    */
 
-	string imageName(argv[1]);
-	string outFilename(argv[2]);
-	string outputImageName(argv[3]);
+	string imageName(image_name);
+	string outFilename(out_file);
+	string outputImageName(output_image);
 	
 	//string imageName("data/hat_edges.pgm");
 	//string outFilename("data/hat_edges.txt");
@@ -70,4 +73,6 @@ void main(int argc, char *argv[])
 
 	//cvReleaseImage(&inputImage);
 	delete inputImage;
+
+	return 1;
 };

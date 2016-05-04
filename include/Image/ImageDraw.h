@@ -47,7 +47,7 @@ inline void ImageDraw<T>::Line(Image<T> *im,int sx,int sy,int ex,int ey,const T 
 	int xindexed = 0;
 	int count = -1;
 
-	if (abs(dx) > abs(dy))
+	if (std::abs(dx) > std::abs(dy))
 	{
 		ds = dy / (dx + 1e-10);
 		xindexed = 1;		

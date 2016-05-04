@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 
-#include "LMNonMaximumSuppression.h"
+#include "../../include/Fdcm/LMNonMaximumSuppression.h"
 
 
 double LMNonMaximumSuppression::OverlapRatio(LMDetWind &curWind,LMDetWind &refWind)
