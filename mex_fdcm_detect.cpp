@@ -221,7 +221,7 @@ void mexFunction(int nlhs, mxArray *plhs[ ],int nrhs, const mxArray *prhs[ ])
 	lm.minCostRatio_ = *minCostRatio;
 	
 		
-	// Load tempalte files
+	// Load template files
 	// The following codes replace the functionality of the code
 	// lm.Init(templateFileName.c_str());
 	int m = mxGetM(prhs[1]);
@@ -229,8 +229,9 @@ void mexFunction(int nlhs, mxArray *plhs[ ],int nrhs, const mxArray *prhs[ ])
 	int nTemplate = max(m,n);
 	lm.ndbImages_ = nTemplate;
 	lm.dbImages_ = new EIEdgeImage[lm.ndbImages_];
-	
-	
+
+	mexPrintf("nTemplate = %d\n", nTemplate)
+
 	mxArray *tempShape;
 	for(int i=0;i<nTemplate;i++)
 	{
