@@ -28,11 +28,11 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <cstring>
 #include <fstream>
 #include <iostream>
-#include "Image.h"
+//#include "Image.h"
+#include "opencv2/core/core.hpp"
 
 
 #define BUF_SIZE 256
-
 
 
 class pnm_error
@@ -43,8 +43,8 @@ class pnm_error
 class ImageIO
 {
 public:
-	inline static Image<uchar> *LoadPBM(const char *name);	
-	inline static Image<uchar> *LoadPGM(const char *name);
+	inline static cv::Mat *LoadPBM(const char *name);
+	inline static cv::Mat *LoadPGM(const char *name);
 	inline static Image<RGBMap> *LoadPPM(const char *name);
 	template <class T>inline  void LoadImage(Image<T> **im, const char *name);
 
@@ -115,7 +115,7 @@ void ImageIO::pnm_read(std::ifstream &file, char *buf)
 	file.ignore();
 }
 
-Image<uchar> *ImageIO::LoadPBM(const char *name) 
+cv::Mat *ImageIO::LoadPBM(const char *name)
 {
 	char buf[BUF_SIZE];
 
@@ -131,24 +131,24 @@ Image<uchar> *ImageIO::LoadPBM(const char *name)
 	int height = atoi(buf);
 
 	/* read data */
-	Image<uchar> *im = new Image<uchar>(width, height);
+    cv::Mat *im = new cv::Mat(cv::Size(width, height), CV_8UC1);
 	for (int i = 0; i < height; i++)
-		read_packed(imPtr(im, 0, i), width, file);
+		read_packed(im->at(0, i), width, file);
 
 	return im;
 }
 
-void ImageIO::SavePBM(Image<uchar> *im, const char *name) 
+void ImageIO::SavePBM(cv::Mat *im, const char *name)
 {
-	int width = im->width();
-	int height = im->height();
+	int width = im->size().width;
+	int height = im->size().height;
 	std::ofstream file(name, std::ios::out | std::ios::binary);
 	file << "P4\n" << width << " " << height << "\n";
 	for (int i = 0; i < height; i++)
-		write_packed(imPtr(im, 0, i), width, file);
+		write_packed(im->at(0, i), width, file);
 }
 
-Image<uchar> *ImageIO::LoadPGM(const char *name) 
+cv::Mat *ImageIO::LoadPGM(const char *name)
 {
 	char buf[BUF_SIZE];
 
@@ -175,7 +175,7 @@ Image<uchar> *ImageIO::LoadPGM(const char *name)
 	}
 
 	/* read data */
-	Image<uchar> *im = new Image<uchar>(width, height);
+	Image<uchar> *im = new cv::Mat(cv::Size(width, height), CV_8UC1);
 	file.read((char *)imPtr(im, 0, 0), width * height * sizeof(uchar));
 
 	return im;

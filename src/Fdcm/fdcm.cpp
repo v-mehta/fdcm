@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     //cv::imwrite(edgeMapName, img, params);
 
     //Image *inputImage=NULL;
-    Image<uchar> *inputImage=NULL;
+    cv::Mat *inputImage=NULL;
 
     //inputImage = cvLoadImage(edgeMapName.c_str(),0);
 	cout << "Loading image edge map" << endl;
@@ -118,49 +118,49 @@ int main(int argc, char *argv[])
 	//lm.Match(lf,detWind);
 	//lm.MatchCostMap(lf,outputCostMapName.c_str());
 
-    vector< vector<LMDetWind> > detWindArrays;
-    detWindArrays.clear();
+    vector< vector<LMDetWind> > detection_window_arrays;
+    detection_window_arrays.clear();
     double maxThreshold = 0.12;
 
-    lm.SingleShapeDetectionWithVaryingQuerySize(lf, maxThreshold, detWindArrays);
+    lm.SingleShapeDetectionWithVaryingQuerySize(lf, maxThreshold, detection_window_arrays);
 
-    cout << "Number of arrays " << detWindArrays.size() << endl;
-    for(int i=0; i<detWindArrays.size(); i++)
+    cout << "Number of arrays " << detection_window_arrays.size() << endl;
+    for(int i=0; i<detection_window_arrays.size(); i++)
     {
-        cout << detWindArrays[i].size() << endl;
+        cout << detection_window_arrays[i].size() << endl;
     }
-    int last = detWindArrays.size()-1;
-    int nDetWindows = detWindArrays[last].size();
+    int last = detection_window_arrays.size()-1;
+    int n_detection_windows = detection_window_arrays[last].size();
 
-    cout << "Number of detection windows " << nDetWindows << endl;
-    vector<LMDetWind> detWind;
+    cout << "Number of detection windows " << n_detection_windows << endl;
+    vector<LMDetWind> detection_windows;
 
-    for(int i=0; i<nDetWindows; i++)
+    for(int i=0; i<n_detection_windows; i++)
     {
         LMDetWind wind;
-        wind.x_ = detWindArrays[last][i].x_;
-        wind.y_ = detWindArrays[last][i].y_;
-        wind.width_ = detWindArrays[last][i].width_;
-        wind.height_ = detWindArrays[last][i].height_;
-        wind.cost_ = detWindArrays[last][i].cost_;
-        wind.count_ = detWindArrays[last][i].count_;
+        wind.x_ = detection_window_arrays[last][i].x_;
+        wind.y_ = detection_window_arrays[last][i].y_;
+        wind.width_ = detection_window_arrays[last][i].width_;
+        wind.height_ = detection_window_arrays[last][i].height_;
+        wind.cost_ = detection_window_arrays[last][i].cost_;
+        wind.count_ = detection_window_arrays[last][i].count_;
 
-        detWind.push_back(wind);
+        detection_windows.push_back(wind);
     }
 
-    cout << "Number of detection windows " << detWind.size() << endl;
+    cout << "Number of detection windows " << detection_windows.size() << endl;
     // Display best matcher in edge map
-	if(displayImageName.c_str() && detWind.size() > 0)
+	if(displayImageName.c_str() && detection_windows.size() > 0)
 	{
         cout << "Loading color original image" << endl;
 		//Image<RGBMap> *debugImage = ImageIO::LoadPPM(displayImageName.c_str());
         cv::Mat image = cv::imread(displayImageName);
 
         cout << "Drawing detection window" << endl;
-        for(int idx=0; idx<detWind.size(); idx++)
+        for(int idx=0; idx<detection_windows.size(); idx++)
         {
-            cv::Point x = cv::Point(detWind[idx].x_, detWind[idx].y_);
-            cv::Point y = cv::Point(detWind[idx].x_ + detWind[idx].width_, detWind[idx].y_ + detWind[idx].height_);
+            cv::Point x = cv::Point(detection_windows[idx].x_, detection_windows[idx].y_);
+            cv::Point y = cv::Point(detection_windows[idx].x_ + detection_windows[idx].width_, detection_windows[idx].y_ + detection_windows[idx].height_);
             cv::rectangle(image, y, x, cv::Scalar(0, 255, 0));
         }
 
