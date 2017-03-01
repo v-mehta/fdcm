@@ -14,6 +14,6 @@ cmake ..
 make
 ```
 
-EI - Edge Image Representation of the input image.
-LF - Line Fitting to fit the Edge Image of the template to the query image.
-LM - Functions for Line Matching and its associated cost.
+- EI - Edge Image Representation of the input image.
+- LF - Line Fitting to fit the Edge Image of the template to the query image.
+- LM - Functions for Line Matching and its associated cost.
