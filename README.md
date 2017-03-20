@@ -1,6 +1,8 @@
 # Fast Directional Chamfer Matching
 
-## Objects
+[Paper](https://www.umiacs.umd.edu/users/vashok/MyPapers/HighlySelectiveConf2010/liu_cvpr2010.pdf)
+
+## Objectives
 
 - OpenCV integration
 - Easy to run and integrate
@@ -9,8 +11,8 @@
 ## Build
 
 ```bash
-cd build    # You may have to create the directory first
-cmake ..
+mkdir -p build && cd build
+cmake -D CUDA_USE_STATIC_CUDA_RUNTIME=OFF ..  # This is needed to work with OpenCV 2.13+
 make
 ```
 
