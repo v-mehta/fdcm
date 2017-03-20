@@ -1,4 +1,4 @@
-#include "../../include/Fdcm/LMLineMatcher.h"
+#include "Fdcm/line_matcher.h"
 
 
 LMLineMatcher::LMLineMatcher()
@@ -41,7 +41,7 @@ void LMLineMatcher::SafeRelease()
 
 
 
-void LMLineMatcher::Match(LFLineFitter &lf,vector<LMDetWind> &detWind)
+void LMLineMatcher::Match(LFLineFitter &lf,vector<DetWind> &detWind)
 {
 	// initialize the memory for storing the information of the best hypothesis.
 	double *distances = new double[MAX_NUM_HYPOTHESES];
@@ -89,7 +89,7 @@ void LMLineMatcher::Match(LFLineFitter &lf,vector<LMDetWind> &detWind)
 	MMFunctions::ISort(distances, counter, iindices);
 
 	// Compute the best hypothesis
-	LMDetWind wind;
+	DetWind wind;
 	wind.x_ = (int)ceil(xIndices[iindices[0]]/scale_-0.5);
 	wind.y_ = (int)ceil(yIndices[iindices[0]]/scale_-0.5);
 	
@@ -433,20 +433,20 @@ void LMLineMatcher::Configure(const char *filename)
 	}
 	file.close();
 
-	PrintParameter();
+	PrintParameters();
 }
 
 
-void LMLineMatcher::PrintParameter()
+void LMLineMatcher::PrintParameters()
 {
 	cout<<"/* =========================================================="<<endl;
 	cout<<"* LMLineMatching parameters"<<endl;
 	cout<<"* ==========================================================="<<endl;
-	cout<<"* NUMBER_DIRECTION:"<<"\t"<<nDirections_<<endl;
-	cout<<"* DIRECTIONAL_COST:"<<"\t"<<directionCost_<<endl;
-	cout<<"* MAXIMUM_EDGE_COST:"<<"\t"<<maxCost_<<endl;
-	cout<<"* MATCHING_SCALE:"<<"\t"<<scale_<<endl;
-	cout<<"* TEMPLATE_SCALE:"<<"\t"<<db_scale_<<endl;
+	cout<<"* NUMBER_DIRECTION:"<<"\t"<< nDirections_ <<endl;
+	cout<<"* DIRECTIONAL_COST:"<<"\t"<< directionCost_ <<endl;
+	cout<<"* MAXIMUM_EDGE_COST:"<<"\t"<< maxCost_ <<endl;
+	cout<<"* MATCHING_SCALE:"<<"\t"<< scale_ <<endl;
+	cout<<"* TEMPLATE_SCALE:"<<"\t"<< db_scale_ <<endl;
 	cout<<"* BASE_SEARCH_SCALE:"<<"\t"<<baseSearchScale_<<endl;
 	cout<<"* MIN_SEARCH_SCALE:"<<"\t"<<minSearchScale_<<endl;
 	cout<<"* MAX_SEARCH_SCALE:"<<"\t"<<maxSearchScale_<<endl;
@@ -512,7 +512,7 @@ void LMLineMatcher::Init(LFLineFitter &lf)
 	}
 }
 
-void LMLineMatcher::SingleShapeDetectionWithVaryingTemplateSizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<LMDetWind> > &detWindArrays)
+void LMLineMatcher::SingleShapeDetectionWithVaryingTemplateSizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<DetWind> > &detWindArrays)
 {
 	//LARGE_INTEGER t1, t2, f;
 	////QueryPerformanceFrequency(&f);
@@ -570,7 +570,7 @@ void LMLineMatcher::SingleShapeDetectionWithVaryingTemplateSizeForROC(LFLineFitt
 	//cout<<"taking "<<setiosflags(ios::fixed)<<setprecision(6)<<(t2.QuadPart - t1.QuadPart)/(1.0*f.QuadPart)<<endl;
 }
 
-void LMLineMatcher::SingleShapeDetectionWithVaryingQuerySizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<LMDetWind> > &detWindArrays)
+void LMLineMatcher::SingleShapeDetectionWithVaryingQuerySizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<DetWind> > &detWindArrays)
 {
 	//LARGE_INTEGER t1, t2, f;
 	////QueryPerformanceFrequency(&f);
@@ -853,7 +853,7 @@ void LMLineMatcher::DetectBruteForceVaryingTemplateSize(EIEdgeImage& dbImage, do
 	}
 }
 
-void LMLineMatcher::SingleShapeDetectionWithVaryingQuerySize(LFLineFitter &lf,double maxThreshold,vector< vector<LMDetWind> > &detWindArrays)
+void LMLineMatcher::SingleShapeDetectionWithVaryingQuerySize(LFLineFitter &lf,double maxThreshold,vector< vector<DetWind> > &detWindArrays)
 {
 	//LARGE_INTEGER t1, t2, f;
 	////QueryPerformanceFrequency(&f);

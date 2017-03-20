@@ -21,34 +21,41 @@ AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
 OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
 */
 
-
-#ifndef _lm_display_h_
-#define _lm_display_h_
+#ifndef _lm_distance_image_h_
+#define _lm_distance_image_h_
 
 #include "Image/Image.h"
-#include "Image/ImageIO.h"
-#include "Image/ImageDraw.h"
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <vector>
-#include "LMDetWind.h"
-#include "EIEdgeImage.h"
-using namespace std;
+#include "Image/distance_transform.h"
+#include "edge_image.h"
+#include "directional_integral_distance_image.h"
 
-class LMDisplay
+
+class LMDistanceImage 
 {
 public:
 
-	static void DrawDetWind(Image<RGBMap> *image,int x,int y,int detWindWidth,int detWindHeight,const RGBMap scalar,int thickness=1);
-	static void DrawDetWindCost(Image<RGBMap> *image,LMDetWind &wind,const RGBMap scalar,int thickness=2);
-	static void DrawDetWindWind(Image<RGBMap> *image,LMDetWind &wind,const RGBMap scalar,int thickness=2);
-	static void DrawMatchTemplate(Image<RGBMap> *image,EIEdgeImage &ei,int x,int y,double scale,const RGBMap scalar,int thickness=1);
+	LMDistanceImage();
+	~LMDistanceImage();
+	void Configure(float directionCost,double maxCost){ directionCost_ = directionCost; maxCost_ = maxCost; };
+	void SetImage(EIEdgeImage& ei);
+	
 
+private:
 
-	static void StoreDetWind(const char *filename,vector< vector<LMDetWind> > &detWindArrays);
-
+	void SafeRelease();
+	void ConstructDTs(EIEdgeImage& ei);
+	void UpdateCosts();
+	void ConstructDIntegrals();
+	
+	vector<LMDirectionalIntegralDistanceImage> idtImages_;
+	int nDirections_;
+	int width_;
+	int height_;
+	
+	vector< Image<float> > dtImages_;
+	float directionCost_;
+	double maxCost_;
+	friend class LMLineMatcher;
 };
-
 
 #endif

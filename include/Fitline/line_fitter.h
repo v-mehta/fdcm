@@ -33,7 +33,7 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 //#include <cxcore.h>
 //#include <highgui.h>
 
-#include "LFLineSegment.h"
+#include "line_segment.h"
 #include "Fdcm/MMFunctions.h"
 #include "Image/Image.h"
 #include "Image/ImageIO.h"

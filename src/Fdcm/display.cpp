@@ -20,7 +20,7 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
 AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING 
 OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
 */
-#include "../../include/Fdcm/LMDisplay.h"
+#include "Fdcm/display.h"
 
 void LMDisplay::DrawDetWind(Image<RGBMap> *image,int x,int y,int detWindWidth,int detWindHeight,const RGBMap scalar,int thickness)
 {
@@ -48,7 +48,7 @@ void LMDisplay::DrawMatchTemplate(Image<RGBMap> *image,EIEdgeImage &ei,int x,int
 }
 
 
-void LMDisplay::DrawDetWindWind(Image<RGBMap> *image,LMDetWind &wind,const RGBMap scalar,int thickness)
+void LMDisplay::DrawDetWindWind(Image<RGBMap> *image,DetWind &wind,const RGBMap scalar,int thickness)
 {
 	//CvScalar scalar2;
 	//if(scalar==NULL)
@@ -62,7 +62,7 @@ void LMDisplay::DrawDetWindWind(Image<RGBMap> *image,LMDetWind &wind,const RGBMa
 	ImageDraw<RGBMap>::Line(image, wind.x_,wind.y_+wind.height_, wind.x_, wind.y_,scalar,thickness);
 }
 
-void LMDisplay::DrawDetWindCost(Image<RGBMap> *image,LMDetWind &wind,const RGBMap scalar,int thickness)
+void LMDisplay::DrawDetWindCost(Image<RGBMap> *image,DetWind &wind,const RGBMap scalar,int thickness)
 {
 	//CvScalar scalar2;
 	//if(scalar==NULL)
@@ -82,7 +82,7 @@ void LMDisplay::DrawDetWindCost(Image<RGBMap> *image,LMDetWind &wind,const RGBMa
 }
 
 
-void LMDisplay::StoreDetWind(const char *filename,vector< vector<LMDetWind> > &detWindArrays)
+void LMDisplay::StoreDetWind(const char *filename,vector< vector<DetWind> > &detWindArrays)
 {
 	ofstream file;
 	file.open(filename);

@@ -28,7 +28,10 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 using namespace std;
 
-class LMDetWind
+/**
+ * Class to represent the detection window.
+ */
+class DetWind
 {
 public:
 	int x_;
@@ -38,18 +41,18 @@ public:
 	double cost_;
 	int count_;
 
-	inline LMDetWind &operator=(const LMDetWind &rhs);
-	inline bool operator==(const LMDetWind &other) const;
-	inline bool operator!=(const LMDetWind &other) const;
-	inline bool operator>=(const LMDetWind &other) const;
-	inline bool operator<=(const LMDetWind &other) const;
-	inline bool operator>(const LMDetWind &other) const;
-	inline bool operator<(const LMDetWind &other) const;
-	inline friend ostream &operator<<(ostream &output,LMDetWind &e);
+	inline DetWind &operator=(const DetWind &rhs);
+	inline bool operator==(const DetWind &other) const;
+	inline bool operator!=(const DetWind &other) const;
+	inline bool operator>=(const DetWind &other) const;
+	inline bool operator<=(const DetWind &other) const;
+	inline bool operator>(const DetWind &other) const;
+	inline bool operator<(const DetWind &other) const;
+	inline friend ostream &operator<<(ostream &output,DetWind &e);
 };
 
 
-ostream &operator<<(ostream &output,LMDetWind &e)
+ostream &operator<<(ostream &output,DetWind &e)
 {
 	//output<< "(" <<  e.x_ <<", " << e.y_ <<", " << e.width_ <<", " << e.height_ <<", " << e.cost_ <<", " << e.count_ <<")";
 	output<< e.x_ <<" "<< e.y_ <<" "<< e.width_ <<" " << e.height_ <<" " << e.cost_ <<" " << e.count_;
@@ -57,7 +60,7 @@ ostream &operator<<(ostream &output,LMDetWind &e)
 }
 
 
-LMDetWind &LMDetWind::operator=(const LMDetWind &rhs)
+DetWind &DetWind::operator=(const DetWind &rhs)
 {
 	x_ = rhs.x_;
 	y_ = rhs.y_;
@@ -68,32 +71,32 @@ LMDetWind &LMDetWind::operator=(const LMDetWind &rhs)
 	return *this;
 }
 
-bool LMDetWind::operator==(const LMDetWind &other) const
+bool DetWind::operator==(const DetWind &other) const
 {
 	return cost_ == other.cost_;
 }
 
-bool LMDetWind::operator!=(const LMDetWind &other) const
+bool DetWind::operator!=(const DetWind &other) const
 {
 	return cost_ != other.cost_;
 }
 
-bool LMDetWind::operator>=(const LMDetWind &other) const
+bool DetWind::operator>=(const DetWind &other) const
 {
 	return cost_ >= other.cost_;
 }
 
-bool LMDetWind::operator<=(const LMDetWind &other) const
+bool DetWind::operator<=(const DetWind &other) const
 {
 	return cost_ <= other.cost_;
 }
 
-bool LMDetWind::operator>(const LMDetWind &other) const
+bool DetWind::operator>(const DetWind &other) const
 {
 	return cost_ > other.cost_;
 }
 
-bool LMDetWind::operator<(const LMDetWind &other) const
+bool DetWind::operator<(const DetWind &other) const
 {
 	return cost_ < other.cost_;
 }

@@ -21,52 +21,34 @@ AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
 OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
 */
 
-#include "../../include/Fdcm/MatchingCostMap.h"
-#include <cstddef>
 
-MatchingCostMap::MatchingCostMap()
-{
-	costMap_ = NULL;
-	nCostMap_ = 0;
+#ifndef _lm_display_h_
+#define _lm_display_h_
 
-}
+#include "Image/Image.h"
+#include "Image/ImageIO.h"
+#include "Image/ImageDraw.h"
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <vector>
+#include "DetWind.h"
+#include "edge_image.h"
+using namespace std;
 
-MatchingCostMap::~MatchingCostMap()
+class LMDisplay
 {
-	Release();	
-}
-	
-void MatchingCostMap::Release()
-{
-	if(costMap_)
-	{
-		for(int i=0;i<nCostMap_;i++)
-			costMap_[i].clear();
-		delete [] costMap_;
-		nCostMap_ = 0;
-	}
-	templateWidth_.clear();
-	templateHeight_.clear();
-	width_.clear();
-	height_.clear();
-	stepSize_.clear();
-	x0_.clear();
-	y0_.clear();
-	scale_.clear();
-	aspect_.clear();
-}
+public:
 
-void MatchingCostMap::Init(int nCostMap)
-{
-	nCostMap_ = nCostMap;
-	costMap_ = new vector<double> [nCostMap_];
-	templateWidth_.resize(nCostMap_);
-	templateHeight_.resize(nCostMap_);
-	width_.resize(nCostMap_);
-	height_.resize(nCostMap_);
-	stepSize_.resize(nCostMap_);
-	x0_.resize(nCostMap_);
-	y0_.resize(nCostMap_);
-	scale_.resize(nCostMap_);
-	aspect_.resize(nCostMap_);
-}
+	static void DrawDetWind(Image<RGBMap> *image,int x,int y,int detWindWidth,int detWindHeight,const RGBMap scalar,int thickness=1);
+	static void DrawDetWindCost(Image<RGBMap> *image,DetWind &wind,const RGBMap scalar,int thickness=2);
+	static void DrawDetWindWind(Image<RGBMap> *image,DetWind &wind,const RGBMap scalar,int thickness=2);
+	static void DrawMatchTemplate(Image<RGBMap> *image,EIEdgeImage &ei,int x,int y,double scale,const RGBMap scalar,int thickness=1);
+
+
+	static void StoreDetWind(const char *filename,vector< vector<DetWind> > &detWindArrays);
+
+};
+
+
+#endif

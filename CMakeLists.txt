@@ -8,31 +8,31 @@ include_directories(BEFORE include)
 find_package( OpenCV REQUIRED )
 
 set(SOURCE_FILES
-        src/Fdcm/EIEdgeImage.cpp
-        include/Fdcm/EIEdgeImage.h
+        src/Fdcm/edge_image.cpp
+        include/Fdcm/edge_image.h
         src/Fdcm/fdcm.cpp
-        include/Fdcm/LMDetWind.h
-        src/Fdcm/LMDirectionalIntegralDistanceImage.cpp
-        include/Fdcm/LMDirectionalIntegralDistanceImage.h
-        src/Fdcm/LMDisplay.cpp
-        include/Fdcm/LMDisplay.h
-        src/Fdcm/LMDistanceImage.cpp
-        include/Fdcm/LMDistanceImage.h
-        src/Fdcm/LMLineMatcher.cpp
-        include/Fdcm/LMLineMatcher.h
-        src/Fdcm/LMNonMaximumSuppression.cpp
-        include/Fdcm/LMNonMaximumSuppression.h
-        src/Fdcm/MatchingCostMap.cpp
-        include/Fdcm/MatchingCostMap.h
+        include/Fdcm/DetWind.h
+        src/Fdcm/directional_integral_distance_image.cpp
+        include/Fdcm/directional_integral_distance_image.h
+        src/Fdcm/display.cpp
+        include/Fdcm/display.h
+        src/Fdcm/distance_image.cpp
+        include/Fdcm/distance_image.h
+        src/Fdcm/line_matcher.cpp
+        include/Fdcm/line_matcher.h
+        src/Fdcm/non_maximum_suppression.cpp
+        include/Fdcm/non_maximum_suppression.h
+        src/Fdcm/matching_cost_map.cpp
+        include/Fdcm/matching_cost_map.h
         include/Fdcm/MMFunctions.h
         src/Fitline/fitline.cpp
-        src/Fitline/LFLineFitter.cpp
-        include/Fitline/LFLineFitter.h
-        src/Fitline/LFLineSegment.cpp
-        include/Fitline/LFLineSegment.h
+        src/Fitline/line_fitter.cpp
+        include/Fitline/line_fitter.h
+        src/Fitline/line_segment.cpp
+        include/Fitline/line_segment.h
         include/Fitline/Point.h
-        src/Image/DistanceTransform.cpp
-        include/Image/DistanceTransform.h
+        src/Image/distance_transform.cpp
+        include/Image/distance_transform.h
         include/Image/Image.h
         include/Image/ImageDraw.h
         include/Image/ImageIO.h

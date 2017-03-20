@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <string>
 #include "Image/Image.h"
 #include "Image/ImageIO.h"
-#include "../../include/Fitline/LFLineFitter.h"
+#include "Fitline/line_fitter.h"
 
 using namespace std;
 

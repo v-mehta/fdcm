@@ -1,8 +1,8 @@
 //#include <cxcore.h>
 #include "Image/Image.h"
 #include "Image/ImageIO.h"
-#include "fitline/LFLineFitter.h"
-#include "../../include/Fdcm/LMLineMatcher.h"
+#include "Fitline/line_fitter.h"
+#include "Fdcm/line_matcher.h"
 
 #include <iostream>
 #include <string>
@@ -42,7 +42,9 @@ int main(int argc, char *argv[])
 
 	if(argc < 7)
 	{
-		std::cerr << "[Syntax] fdcm template_edgeMap.pgm input_edgeMap.pgm input_realImage.jpg para_line_fitter.txt template_line_fitter.txt para_line_matcher.txt" << std::endl;
+		std::cerr <<
+                  "[Syntax] fdcm template_edgeMap.pgm input_edgeMap.pgm input_realImage.jpg para_line_fitter.txt template_line_fitter.txt para_line_matcher.txt"
+                  << std::endl;
 		exit(0);
 	}
 
@@ -70,7 +72,6 @@ int main(int argc, char *argv[])
     //params.push_back(1);
     //cv::imwrite(edgeMapName, img, params);
 
-    //Image *inputImage=NULL;
     Image<uchar> *inputImage=NULL;
 
     //inputImage = cvLoadImage(edgeMapName.c_str(),0);
@@ -83,19 +84,19 @@ int main(int argc, char *argv[])
 		exit(0);
 	}
 
-    cout << "Loading template edge map" << endl;
+    std::cout << "Loading template edge map" << std::endl;
     Image<uchar> *templateImage = ImageIO::LoadPGM(templateFileName.c_str());
     if(templateImage==NULL)
     {
-        std::cerr << "[ERROR] Failed to read template image " << templateFileName << endl;
+        std::cerr << "[ERROR] Failed to read template image " << templateFileName << std::endl;
         exit(0);
     }
 
     LFLineFitter lf_template;
     lf_template.Configure(argv[5]);
-    cout << "Initializing Template Line Fitter" << endl;
+    std::cout << "Initializing Template Line Fitter" << endl;
     lf_template.Init();
-    cout << "Fitting Lines" << endl;
+    std::cout << "Fitting Lines" << std::endl;
     // Template Line Fitting
     lf_template.FitLine(templateImage);
 
@@ -108,69 +109,66 @@ int main(int argc, char *argv[])
     LMLineMatcher lm;
     lm.Configure(argv[6]);
 
-    cout << "Initializing Line Matcher with Template Line Representation" << endl;
-	lm.Init(lf_template);
+    std::cout << "Initializing Line Matcher with Template Line Representation" << std::endl;
+    lm.Init(lf_template);
 
-	cout << "Starting match process" << endl;
-	// FDCM Matching
+    std::cout << "Starting match process" << endl;
+    // FDCM Matching
 
-    //vector<LMDetWind> detWind;
-	//lm.Match(lf,detWind);
-	//lm.MatchCostMap(lf,outputCostMapName.c_str());
+    //vector<DetWind> detWind;
+    // lm.Match(lf,detWind);
+    //lm.MatchCostMap(lf,outputCostMapName.c_str());
 
-    vector< vector<LMDetWind> > detWindArrays;
+    vector< vector<DetWind> > detWindArrays;
     detWindArrays.clear();
     double maxThreshold = 0.12;
 
     lm.SingleShapeDetectionWithVaryingQuerySize(lf, maxThreshold, detWindArrays);
 
-    cout << "Number of arrays " << detWindArrays.size() << endl;
+    std::cout << "Number of arrays " << detWindArrays.size() << std::endl;
     for(int i=0; i<detWindArrays.size(); i++)
     {
-        cout << detWindArrays[i].size() << endl;
+        std::cout << detWindArrays[i].size() << std::endl;
     }
     int last = detWindArrays.size()-1;
     int nDetWindows = detWindArrays[last].size();
 
-    cout << "Number of detection windows " << nDetWindows << endl;
-    vector<LMDetWind> detWind;
+    std::cout << "Number of detection windows " << nDetWindows << std::endl;
+    vector<DetWind> detWind;
 
     for(int i=0; i<nDetWindows; i++)
     {
-        LMDetWind wind;
+        DetWind wind;
         wind.x_ = detWindArrays[last][i].x_;
         wind.y_ = detWindArrays[last][i].y_;
         wind.width_ = detWindArrays[last][i].width_;
         wind.height_ = detWindArrays[last][i].height_;
         wind.cost_ = detWindArrays[last][i].cost_;
         wind.count_ = detWindArrays[last][i].count_;
-
         detWind.push_back(wind);
     }
 
-    cout << "Number of detection windows " << detWind.size() << endl;
+    std::cout << "Number of detection windows " << detWind.size() << std::endl;
     // Display best matcher in edge map
-	if(displayImageName.c_str() && detWind.size() > 0)
-	{
-        cout << "Loading color original image" << endl;
-		//Image<RGBMap> *debugImage = ImageIO::LoadPPM(displayImageName.c_str());
-        cv::Mat image = cv::imread(displayImageName);
+    if(displayImageName.c_str() && detWind.size() > 0)
+    {
+    cout << "Loading color original image" << endl;
+    //Image<RGBMap> *debugImage = ImageIO::LoadPPM(displayImageName.c_str());
+    cv::Mat image = cv::imread(displayImageName);
 
-        cout << "Drawing detection window" << endl;
-        for(int idx=0; idx<detWind.size(); idx++)
-        {
-            cv::Point x = cv::Point(detWind[idx].x_, detWind[idx].y_);
-            cv::Point y = cv::Point(detWind[idx].x_ + detWind[idx].width_, detWind[idx].y_ + detWind[idx].height_);
-            cv::rectangle(image, y, x, cv::Scalar(0, 255, 0));
-        }
+    cout << "Drawing detection window" << endl;
+    for(int idx=0; idx<detWind.size(); idx++)
+    {
+        cv::Point x = cv::Point(detWind[idx].x_, detWind[idx].y_);
+        cv::Point y = cv::Point(detWind[idx].x_ + detWind[idx].width_, detWind[idx].y_ + detWind[idx].height_);
+        cv::rectangle(image, y, x, cv::Scalar(0, 255, 0));
+    }
+    cv::imshow("Matched!", image);
+    cv::waitKey();
+    }
 
-        cv::imshow("Matched!", image);
-        cv::waitKey();
-
-	}
-
-	//cvReleaseImage(&inputImage);
-	delete inputImage;
+    //cvReleaseImage(&inputImage);
+    delete inputImage;
 
     return 0;
 };

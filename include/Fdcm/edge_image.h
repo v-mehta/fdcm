@@ -21,8 +21,8 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _ei_edge_image_h_
 #define _ei_edge_image_h_
 
-#include "Fitline/LFLineSegment.h"
-#include "Fitline/LFLineFitter.h"
+#include "Fitline/line_segment.h"
+#include "Fitline/line_fitter.h"
 #include "Fitline/Point.h"
 #include "Image/Image.h"
 #include "Image/ImageDraw.h"

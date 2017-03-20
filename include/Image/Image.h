@@ -54,6 +54,10 @@ inline RGBMap& RGBMap::operator=(const RGBMap &rhs)
 }
 
 
+/**
+ * Image class to represent the input image.
+ * @tparam T
+ */
 template <class T>
 class Image 
 {

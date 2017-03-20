@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 
-#include "../../include/Fdcm/LMNonMaximumSuppression.h"
+#include "Fdcm/non_maximum_suppression.h"
 
 
-double LMNonMaximumSuppression::OverlapRatio(LMDetWind &curWind,LMDetWind &refWind)
+double LMNonMaximumSuppression::OverlapRatio(DetWind &curWind,DetWind &refWind)
 {
-	double area1,area2;
-	double unionArea,intersectArea;
+	double area1, area2;
+	double unionArea, intersectArea;
 
 	int topLeftX,topLeftY,bottomRightX,bottomRightY;
 
@@ -49,7 +49,7 @@ double LMNonMaximumSuppression::OverlapRatio(LMDetWind &curWind,LMDetWind &refWi
 }
 
 
-bool LMNonMaximumSuppression::IsOverlapping(LMDetWind &curWind,vector<LMDetWind> &wind,double overlapThresh)
+bool LMNonMaximumSuppression::IsOverlapping(DetWind &curWind,vector<DetWind> &wind,double overlapThresh)
 {
 	for(unsigned int i=0; i< wind.size(); i++)
 	{
@@ -62,10 +62,10 @@ bool LMNonMaximumSuppression::IsOverlapping(LMDetWind &curWind,vector<LMDetWind>
 	return false;
 }
 
-void LMNonMaximumSuppression::ComputeValidWindVaryingQuerySize(MatchingCostMap &matchingCostMap,vector<LMDetWind> &detWinds,double threshold)
+void LMNonMaximumSuppression::ComputeValidWindVaryingQuerySize(MatchingCostMap &matchingCostMap,vector<DetWind> &detWinds,double threshold)
 {
 	int index ;
-	LMDetWind aWind;
+	DetWind aWind;
 	detWinds.reserve(matchingCostMap.width_[0]*matchingCostMap.height_[0]);
 	for(int i=0;i<matchingCostMap.nCostMap_;i++)
 	{		
@@ -90,10 +90,10 @@ void LMNonMaximumSuppression::ComputeValidWindVaryingQuerySize(MatchingCostMap &
 	}
 }
 
-void LMNonMaximumSuppression::ComputeValidWindVaryingTemplateSize(MatchingCostMap &matchingCostMap,vector<LMDetWind> &detWinds,double threshold)
+void LMNonMaximumSuppression::ComputeValidWindVaryingTemplateSize(MatchingCostMap &matchingCostMap,vector<DetWind> &detWinds,double threshold)
 {
 	int index ;
-	LMDetWind aWind;
+	DetWind aWind;
 	detWinds.reserve(matchingCostMap.width_[0]*matchingCostMap.height_[0]);
 	for(int i=0;i<matchingCostMap.nCostMap_;i++)
 	{		
@@ -119,13 +119,13 @@ void LMNonMaximumSuppression::ComputeValidWindVaryingTemplateSize(MatchingCostMa
 }
 
 
-void LMNonMaximumSuppression::ComputeDetection(MatchingCostMap &matchingCostMap,double threshold,double overlapThresh,vector<LMDetWind> &wind,int varyingQuerySize)
+void LMNonMaximumSuppression::ComputeDetection(MatchingCostMap &matchingCostMap,double threshold,double overlapThresh,vector<DetWind> &wind,int varyingQuerySize)
 {
 	wind.clear();
 
 	// Scan the matching cost map to find the hypotheses with a matching cost less than the threshold,
 	// and construct the detection windows for these hypotheses.
-	vector<LMDetWind> detWinds;
+	vector<DetWind> detWinds;
 	if(varyingQuerySize)
 		ComputeValidWindVaryingQuerySize(matchingCostMap,detWinds,threshold);
 	else
@@ -139,7 +139,7 @@ void LMNonMaximumSuppression::ComputeDetection(MatchingCostMap &matchingCostMap,
 
 
 	// Sort the window array in the ascending order of matching cost.
-	LMDetWind *tmpWind = new LMDetWind [detWinds.size()];
+	DetWind *tmpWind = new DetWind [detWinds.size()];
 	for(unsigned int i=0;i<detWinds.size();i++)
 		tmpWind[i] = detWinds[i];
 	MMFunctions::Sort(tmpWind,detWinds.size());

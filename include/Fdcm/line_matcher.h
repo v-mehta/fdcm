@@ -32,13 +32,13 @@ OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <string>
 #include <stdio.h>
 #include <vector>
-#include "Fitline/LFLineFitter.h"
-#include "EIEdgeImage.h"
-#include "LMDistanceImage.h"
-#include "LMDetWind.h"
-#include "LMDisplay.h"
-#include "LMNonMaximumSuppression.h"
-#include "MatchingCostMap.h"
+#include "Fitline/line_fitter.h"
+#include "edge_image.h"
+#include "distance_image.h"
+#include "DetWind.h"
+#include "display.h"
+#include "non_maximum_suppression.h"
+#include "matching_cost_map.h"
 //#include <windows.h>
 
 using namespace std;
@@ -55,24 +55,24 @@ public:
 
 
 
-	void PrintParameter();
+	void PrintParameters();
 
 	void Init(const char* fileName);
 	void Init(LFLineFitter &lf);
 
 	// find the best matcher
-	void Match(LFLineFitter &lf,vector<LMDetWind> &detWind);
+	void Match(LFLineFitter &lf,vector<DetWind> &detWind);
 
 	// compute detection windows
-	//void Detect(LFLineFitter &lf,double detectionThreshold,vector<LMDetWind> &detWinds);
+	//void Detect(LFLineFitter &lf,double detectionThreshold,vector<DetWind> &detWinds);
 
 	// compute detection
-	void SingleShapeDetectionWithVaryingQuerySize(LFLineFitter &lf,double maxThreshold,vector< vector<LMDetWind> > &detWindArrays);
+	void SingleShapeDetectionWithVaryingQuerySize(LFLineFitter &lf,double maxThreshold,vector< vector<DetWind> > &detWindArrays);
 
 
 	// compute ROC curves
-	void SingleShapeDetectionWithVaryingQuerySizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<LMDetWind> > &detWindArrays);
-	void SingleShapeDetectionWithVaryingTemplateSizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<LMDetWind> > &detWindArrays);
+	void SingleShapeDetectionWithVaryingQuerySizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<DetWind> > &detWindArrays);
+	void SingleShapeDetectionWithVaryingTemplateSizeForROC(LFLineFitter &lf,double minThreshold,double gap,double maxThreshold,vector< vector<DetWind> > &detWindArrays);
 
 
 	// compute the matching cost map (no early termination).

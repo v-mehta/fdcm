@@ -21,41 +21,52 @@ AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
 OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
 */
 
-#ifndef _lm_distance_image_h_
-#define _lm_distance_image_h_
+#include "Fdcm/matching_cost_map.h"
+#include <cstddef>
 
-#include "Image/Image.h"
-#include "Image/DistanceTransform.h"
-#include "EIEdgeImage.h"
-#include "LMDirectionalIntegralDistanceImage.h"
-
-
-class LMDistanceImage 
+MatchingCostMap::MatchingCostMap()
 {
-public:
+	costMap_ = NULL;
+	nCostMap_ = 0;
 
-	LMDistanceImage();
-	~LMDistanceImage();
-	void Configure(float directionCost,double maxCost){ directionCost_ = directionCost; maxCost_ = maxCost; };
-	void SetImage(EIEdgeImage& ei);
+}
+
+MatchingCostMap::~MatchingCostMap()
+{
+	Release();	
+}
 	
+void MatchingCostMap::Release()
+{
+	if(costMap_)
+	{
+		for(int i=0;i<nCostMap_;i++)
+			costMap_[i].clear();
+		delete [] costMap_;
+		nCostMap_ = 0;
+	}
+	templateWidth_.clear();
+	templateHeight_.clear();
+	width_.clear();
+	height_.clear();
+	stepSize_.clear();
+	x0_.clear();
+	y0_.clear();
+	scale_.clear();
+	aspect_.clear();
+}
 
-private:
-
-	void SafeRelease();
-	void ConstructDTs(EIEdgeImage& ei);
-	void UpdateCosts();
-	void ConstructDIntegrals();
-	
-	vector<LMDirectionalIntegralDistanceImage> idtImages_;
-	int nDirections_;
-	int width_;
-	int height_;
-	
-	vector< Image<float> > dtImages_;
-	float directionCost_;
-	double maxCost_;
-	friend class LMLineMatcher;
-};
-
-#endif
+void MatchingCostMap::Init(int nCostMap)
+{
+	nCostMap_ = nCostMap;
+	costMap_ = new vector<double> [nCostMap_];
+	templateWidth_.resize(nCostMap_);
+	templateHeight_.resize(nCostMap_);
+	width_.resize(nCostMap_);
+	height_.resize(nCostMap_);
+	stepSize_.resize(nCostMap_);
+	x0_.resize(nCostMap_);
+	y0_.resize(nCostMap_);
+	scale_.resize(nCostMap_);
+	aspect_.resize(nCostMap_);
+}
